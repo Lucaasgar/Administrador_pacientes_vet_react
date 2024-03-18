@@ -47,15 +47,18 @@ function Formulario({pacientes, setPacientes, paciente, setPaciente}) {
         }
 
         if(paciente.id){
-            // Actualizar paciente
+            // ACTUALIZAR PACIENTE
 
-            objPaciente.id = paciente.id
+            objPaciente.id = paciente.id // Le agregamos al objPaciente el ID que no posee
+
+
             const pacientesActualizados = pacientes.map( (pacienteStatus) => {
                return paciente.id === pacienteStatus.id ? objPaciente : pacienteStatus
             })
 
+            // Agregamos el paciente con el nuevo array que nos retorno map
             setPacientes(pacientesActualizados)
-            
+
             // Limpiamos el objeto Paciente 
             setPaciente({})
         
@@ -160,7 +163,7 @@ function Formulario({pacientes, setPacientes, paciente, setPaciente}) {
                 <input 
                     type="submit"
                     className="w-full bg-indigo-600 p-3 font-bold uppercase text-white cursor-pointer hover:bg-indigo-700 transition-colors rounded-md" 
-                    value={ paciente.sintomas ? 'Editar paciente' : 'Agregar paciente'}
+                    value={ paciente.sintomas ? 'Actualizar paciente' : 'Agregar paciente'}
                 />
             </form>
         </div>

@@ -1,6 +1,6 @@
 import Pacientes from "./Pacientes"
 
-function ListadoPacientes({pacientes, setPaciente}) {
+function ListadoPacientes({pacientes, setPaciente, eliminarPaciente}) {
 
     return(
         <aside className="md:w-1/2 lg:w-3/5 md:h-screen overflow-y-auto mx-5">
@@ -31,6 +31,7 @@ function ListadoPacientes({pacientes, setPaciente}) {
                         key={paciente.id} 
                         paciente={paciente}  
                         setPaciente={setPaciente} 
+                        eliminarPaciente={eliminarPaciente}
                     />
                 )
             })}
