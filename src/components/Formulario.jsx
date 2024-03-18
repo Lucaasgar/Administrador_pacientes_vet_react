@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-function Formulario({pacientes, setPacientes}) {
+function Formulario({pacientes, setPacientes, paciente, setPaciente}) {
     const [nombre, setNombre] = useState('')
     const [propietario, setPropietario] = useState('')
     const [email, setEmail] = useState('')
@@ -8,11 +8,25 @@ function Formulario({pacientes, setPacientes}) {
     const [sintomas, setSintomas] = useState('')
 
     const [error, setError] = useState(false)
+
+    useEffect( () => {
+        if( Object.keys(paciente).length > 0){
+            setNombre(paciente.nombre)
+            setPropietario(paciente.propietario)
+            setEmail(paciente.email)
+            setFecha(paciente.fecha)
+            setSintomas(paciente.sintomas)
+        }
+    }, [paciente])
     
+    const generarId = () => {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // VALIDA   R FORMULARIO
+        // VALIDAR FORMULARIO
         if( [nombre, propietario, email, fecha, sintomas].includes('') ) {
             console.log('Hay un campo vacio.');
 
@@ -29,11 +43,29 @@ function Formulario({pacientes, setPacientes}) {
             propietario, 
             email, 
             fecha,
-            sintomas
+            sintomas,
         }
+
+        if(paciente.id){
+            // Actualizar paciente
+
+            objPaciente.id = paciente.id
+            const pacientesActualizados = pacientes.map( (pacienteStatus) => {
+               return paciente.id === pacienteStatus.id ? objPaciente : pacienteStatus
+            })
+
+            setPacientes(pacientesActualizados)
+            
+            // Limpiamos el objeto Paciente 
+            setPaciente({})
         
-        // AGREGAMOS EL PACIENTE CON EL SPREED METHOD PARA NO MUTAR EL ARRAY ORIGINAL
-        setPacientes([...pacientes, objPaciente])
+        } else{
+            // Creamos un nuevo paciente
+            
+            // AGREGAMOS EL PACIENTE CON EL SPREED METHOD PARA NO MUTAR EL ARRAY ORIGINAL
+            objPaciente.id = generarId()
+            setPacientes([...pacientes, objPaciente])
+        }
 
         // LIMPIAMOS EL FORMULARIO (RESETEAMOS EL VALOR DE "VALUE")
 
@@ -128,7 +160,7 @@ function Formulario({pacientes, setPacientes}) {
                 <input 
                     type="submit"
                     className="w-full bg-indigo-600 p-3 font-bold uppercase text-white cursor-pointer hover:bg-indigo-700 transition-colors rounded-md" 
-                    value="Agregar paciente"
+                    value={ paciente.sintomas ? 'Editar paciente' : 'Agregar paciente'}
                 />
             </form>
         </div>
